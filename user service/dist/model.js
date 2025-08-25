@@ -1,0 +1,28 @@
+import mongoose, { Schema, Model } from "mongoose";
+const userSchema = new Schema({
+    name: {
+        type: String,
+        required: true,
+    },
+    email: {
+        type: String,
+        required: true,
+        unique: true,
+    },
+    password: {
+        type: String,
+        required: true,
+    },
+    role: {
+        type: String,
+        required: true,
+    },
+    playlist: {
+        type: [String],
+        default: [],
+    },
+}, {
+    timestamps: true,
+});
+export const User = mongoose.model("User", userSchema);
+//# sourceMappingURL=model.js.map
