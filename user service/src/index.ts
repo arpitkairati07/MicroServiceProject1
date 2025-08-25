@@ -1,10 +1,12 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
+import userRoutes from './route.js'
 
 dotenv.config();
 
 const app = express();
+app.use("/api/v1",userRoutes);
 
 const connectDb = async () => {
   try {
