@@ -1,8 +1,17 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import { sql } from './config/db.js';
+import adminRoutes from './route.js';
+import cloudinary from 'cloudinary';
 dotenv.config();
+cloudinary.v2.config({
+    cloud_name: process.env.Cloud_Name,
+    api_key: process.env.Cloud_Api_Key,
+    api_secret: process.env.Cloud_Api_Secret
+});
+// console.log('Cloudinary config:', cloudinary.v2.config());
 const app = express();
+app.use(express.json());
 async function initDB() {
     try {
         await sql `
@@ -29,6 +38,7 @@ async function initDB() {
         console.error("❌ Error creating tables:", error);
     }
 }
+app.use("/api/v1", adminRoutes);
 const port = process.env.PORT || 7000;
 initDB().then(() => {
     app.listen(port, () => {
