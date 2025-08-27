@@ -131,4 +131,25 @@ export const deleteAlbum = TryCatch(async (req, res) => {
         message: "Album and its songs deleted successfully"
     });
 });
+//Delete Songs
+export const deleteSong = TryCatch(async (req, res) => {
+    if (req.user?.role !== "admin") {
+        return res.status(403).json({
+            message: "Only Admins can delete Songs"
+        });
+        return;
+    }
+    const { id } = req.params;
+    const isSong = await sql `SELECT * FROM songs WHERE id=${id}`;
+    if (isSong.length === 0) {
+        return res.status(400).json({
+            message: "No song with this id exists"
+        });
+        return;
+    }
+    await sql `DELETE FROM songs WHERE id=${id};`;
+    res.json({
+        message: "Song deleted successfully"
+    });
+});
 //# sourceMappingURL=controller.js.map
