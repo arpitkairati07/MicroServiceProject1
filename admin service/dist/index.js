@@ -4,6 +4,7 @@ import { sql } from './config/db.js';
 import adminRoutes from './route.js';
 import cloudinary from 'cloudinary';
 import redis from 'redis';
+import cors from 'cors';
 dotenv.config();
 export const redisClient = redis.createClient({
     password: process.env.Redis_password,
@@ -25,6 +26,7 @@ cloudinary.v2.config({
 // console.log('Cloudinary config:', cloudinary.v2.config());
 const app = express();
 app.use(express.json());
+app.use(cors());
 async function initDB() {
     try {
         await sql `
