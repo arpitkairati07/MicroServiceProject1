@@ -2,7 +2,7 @@ import TryCatch from "./TryCatch.js";
 import getBuffer from "./config/dataUri.js";
 import cloudinary from "cloudinary";
 import { sql } from "./config/db.js";
-import { get } from "http";
+import { redisClient } from "./index.js";
 export const addAlbum = TryCatch(async (req, res) => {
     if (req.user?.role !== "admin") {
         return res.status(403).json({
@@ -29,6 +29,10 @@ export const addAlbum = TryCatch(async (req, res) => {
     const result = await sql `
         INSERT INTO albums (title, description, thumbnail) VALUES(${title}, ${description}, ${cloud.secure_url}) RETURNING *;
         `;
+    if (redisClient.isReady) {
+        await redisClient.del("albums");
+        console.log("Albums cache cleared");
+    }
     res.json({
         message: "Album added successfully",
         album: result[0],
@@ -68,6 +72,10 @@ export const addSongs = TryCatch(async (req, res) => {
     const result = await sql `
         INSERT INTO songs (title, description, audio, album_id) VALUES(${title}, ${description}, ${cloud.secure_url}, ${album}) RETURNING *;
         `;
+    if (redisClient.isReady) {
+        await redisClient.del("songs");
+        console.log("Songs cache cleared");
+    }
     res.json({
         message: "Song added successfully",
         song: result[0],
@@ -104,6 +112,10 @@ export const addThumbnail = TryCatch(async (req, res) => {
     }
     const cloud = await cloudinary.v2.uploader.upload(fileBuffer.content, { folder: "songs" });
     const result = await sql `UPDATE songs SET thumbnail=${cloud.secure_url} WHERE id=${req.params.id} RETURNING *;`;
+    if (redisClient.isReady) {
+        await redisClient.del("songs");
+        console.log("Songs cache cleared");
+    }
     res.json({
         message: "Thumbnail added successfully",
         song: result[0],
@@ -127,6 +139,14 @@ export const deleteAlbum = TryCatch(async (req, res) => {
     }
     await sql `DELETE FROM songs WHERE album_id=${id};`;
     await sql `DELETE FROM albums WHERE id=${id};`;
+    if (redisClient.isReady) {
+        await redisClient.del("albums");
+        console.log("Albums cache cleared");
+    }
+    if (redisClient.isReady) {
+        await redisClient.del("songs");
+        console.log("Songs cache cleared");
+    }
     res.json({
         message: "Album and its songs deleted successfully"
     });
@@ -148,6 +168,10 @@ export const deleteSong = TryCatch(async (req, res) => {
         return;
     }
     await sql `DELETE FROM songs WHERE id=${id};`;
+    if (redisClient.isReady) {
+        await redisClient.del("songs");
+        console.log("Songs cache cleared");
+    }
     res.json({
         message: "Song deleted successfully"
     });
