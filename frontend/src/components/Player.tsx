@@ -53,7 +53,7 @@ const Player = () => {
   };
 
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newVolume = parseFloat(e.target.value) /100;
+    const newVolume = parseFloat(e.target.value) / 100;
     setVolume(newVolume);
     if (audioRef.current) {
       audioRef.current.volume = newVolume;
@@ -78,6 +78,7 @@ const Player = () => {
     <div>
       {song && (
         <div className="h-[10%] bg-black flex justify-between items-center text-white px-4">
+          {/* Left - Song Info */}
           <div className="gap-4 items-center lg:flex">
             <img
               src={song.thumbnail ? song.thumbnail : "/image.png"}
@@ -88,32 +89,61 @@ const Player = () => {
               <p>{song.title}</p>
               <p>{song.description?.slice(0, 30)}...</p>
             </div>
-            <div className="flex flex-col items-center gap-1 m-auto">
-              {song.audio && (
-                <audio
-                  ref={audioRef}
-                  src={song.audio}
-                  autoPlay={isPlaying}
-               
-                  className="w-96"
-                />
-              )}
-              <div className="w-full flex items-center font-thin text-green-400">
-                <input type="range" min={"0"} max={"100"} className="progress-bar w-[120px] md:w-[300px]" value={(progress/duration)*100 || 0} onChange={durationChange}/>
-              </div>
+          </div>
 
-              <div className="flex justify-center items-center gap-4">
-                <span className="cursor-pointer" onClick={prevSong}><GrChapterPrevious></GrChapterPrevious></span>
+          {/* Middle - Controls */}
+          <div className="flex-1 flex flex-col items-center">
+            {song.audio && (
+              <audio
+                ref={audioRef}
+                src={song.audio}
+                autoPlay={isPlaying}
+                className="hidden"
+              />
+            )}
 
-                <button className="bg-white text-black rounded-full p-2 cursor-pointer" onClick={handlePlayPause}>{isPlaying ? <FaPause></FaPause>:<FaPlay></FaPlay>}</button>
+            {/* Progress Bar */}
+            <div className="w-full flex justify-center mb-2">
+              <input
+                type="range"
+                min={"0"}
+                max={"100"}
+                className="progress-bar w-[200px] md:w-[400px]"
+                value={(progress / duration) * 100 || 0}
+                onChange={durationChange}
+              />
+            </div>
 
-                <span className="cursor-pointer" onClick={nextSong}><GrChapterNext></GrChapterNext></span>
+            {/* Buttons (Centered) */}
+            <div className="flex justify-center items-center gap-6">
+              <span className="cursor-pointer" onClick={prevSong}>
+                <GrChapterPrevious size={24} />
+              </span>
 
-              </div>
+              <button
+                className="bg-white text-black rounded-full p-3 cursor-pointer"
+                onClick={handlePlayPause}
+              >
+                {isPlaying ? <FaPause size={20} /> : <FaPlay size={20} />}
+              </button>
+
+              <span className="cursor-pointer" onClick={nextSong}>
+                <GrChapterNext size={24} />
+              </span>
             </div>
           </div>
+
+          {/* Right - Volume */}
           <div className="flex items-center">
-            <input type="range" className="w-16 md:w-32 min" min={"0"} max={"100"} step={"0.01"} value={volume*100} onChange={handleVolumeChange} />
+            <input
+              type="range"
+              className="w-16 md:w-32"
+              min={"0"}
+              max={"100"}
+              step={"0.01"}
+              value={volume * 100}
+              onChange={handleVolumeChange}
+            />
           </div>
         </div>
       )}
