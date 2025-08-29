@@ -21,12 +21,16 @@ export interface Album {
 
 interface SongContextType {
     songs: Song[]; 
+    song: Song | null; 
     isPlaying: boolean;
     setIsPlaying: (value: boolean) => void;
     selectedSong: string | null;
     setSelectedSong: (id: string | null) => void;
     loading: boolean;
     albums: Album[];
+    fetchSingleSong: (id: string) => Promise<void>;
+    nextSong:()=>void;
+    prevSong:()=>void;
 }
 
 const SongContext = createContext<SongContextType | undefined>(undefined);
@@ -59,6 +63,19 @@ export const SongProvider: React.FC<SongProviderProps> = ({ children }) => {
         }
     },[])
 
+    const[song,setSong]=useState<Song|null>(null);
+    // Fetch single song details when selectedSong changes 
+
+    const fetchSingleSong=useCallback(async(id:string) =>{
+        if(!selectedSong) return;
+        try {
+            const {data} =await axios.get<Song>(`${server}/api/v1/song/${selectedSong}`);
+            setSong(data);
+        } catch (error) {
+            console.log(error);
+        }
+    },[selectedSong])    
+
     const fetchAlbums=useCallback(async()=>{
         try {
             const {data}=await axios.get<Album[]>(`${server}/api/v1/album/all`); 
@@ -69,12 +86,33 @@ export const SongProvider: React.FC<SongProviderProps> = ({ children }) => {
         }
     },[])
 
+    const[index,setIndex]=useState<number>(0);
+
+    const nextSong=useCallback(()=>{
+        if(index===songs.length-1){
+            setIndex(0);
+            setSelectedSong(songs[0].id.toString());
+        }else{
+            setIndex((prevIndex)=>prevIndex+1);
+            setSelectedSong(songs[index+1]?.id.toString());
+        }
+    },[index,songs])
+
+
+    const prevSong=useCallback(()=>{
+        if(index>0){
+            setIndex((prev)=>prev-1);
+            setSelectedSong(songs[index-1]?.id.toString());
+        }
+    },[index,songs]) 
+    
+    
     useEffect(()=>{
         fetchSongs();
         fetchAlbums();
     },[])
 
-    return <SongContext.Provider value={{ songs,setSelectedSong,selectedSong,isPlaying,setIsPlaying,loading,albums }}>{children}</SongContext.Provider>;
+    return <SongContext.Provider value={{ songs,setSelectedSong,selectedSong,isPlaying,setIsPlaying,loading,albums,fetchSingleSong,song,nextSong,prevSong }}>{children}</SongContext.Provider>;
 };
 
 export const useSongData = () => {
