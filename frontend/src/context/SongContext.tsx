@@ -77,7 +77,7 @@ export const SongProvider: React.FC<SongProviderProps> = ({ children }) => {
     return <SongContext.Provider value={{ songs,setSelectedSong,selectedSong,isPlaying,setIsPlaying,loading,albums }}>{children}</SongContext.Provider>;
 };
 
-export const useSongContext = () => {
+export const useSongData = () => {
     const context = useContext(SongContext);
     if (!context) {
         throw new Error("useSongContext must be used within a SongProvider");
