@@ -3,6 +3,7 @@ import { FaPlay } from "react-icons/fa"
 import { FaBookBookmark } from "react-icons/fa6"
 import { useUserData } from "../context/UserContext"
 import { useSongData } from "../context/SongContext"
+import posterimage from '../assets/posterimage.jpg'
 
 interface SongCardProps {
     image:string,
@@ -21,7 +22,11 @@ const SongCard:React.FC<SongCardProps> = ({image,name,desc,id}) => {
     <div className="min-w-[180px] p-2 px-3 rounded cursor-pointer hover:bg-[#ffffff26]">
         <div className="relative group">
 
-            <img src={image ? image : "./image.png"} alt={name} className="mr-1 w-[160px] rounded"/>
+        <img
+          src={image || posterimage}
+          alt={name}
+          className="mr-1 w-[160px] rounded"
+        />
             <div className="flex gap-2">
 
                 <button className="absolute bottom-2 right-14 bg-green-500 text-black p-3 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer" onClick={()=>{
