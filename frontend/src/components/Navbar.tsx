@@ -3,7 +3,11 @@ import { useUserData } from "../context/UserContext";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const { isAuth } = useUserData();
+  const { isAuth,logoutUser } = useUserData();
+
+  const logoutUserHandler = () =>{
+    logoutUser();
+  }
   return (
     <>
       <div className="w=full flex justify-between items-center font-semibold">
@@ -32,7 +36,7 @@ const Navbar = () => {
           </p>
 
           {isAuth ? (
-            <p className="bg-white text-black px-4 py-1 text-[15px] cursor-pointer rounded-full">
+            <p onClick={logoutUserHandler} className="bg-white text-black px-4 py-1 text-[15px] cursor-pointer rounded-full">
               LogOut
             </p>
           ) : (

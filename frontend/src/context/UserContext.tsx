@@ -18,6 +18,8 @@ interface UserContextType{
     loading: boolean;
     btnLoading: boolean;
     loginUser: (email:string,password:string,navigate:(path:string)=>void)=>Promise<void>;
+    registerUser: (name:string,email:string,password:string,navigate:(path:string)=>void)=>Promise<void>;
+    logoutUser: ()=>Promise<void>
 }
 
 const UserContext= createContext<UserContextType | undefined>(undefined)
@@ -31,6 +33,24 @@ export const UserProvider: React.FC<UserProviderProps> = ({children})=>{
     const [loading,setLoading] = useState(true);
     const[isAuth,setIsAuth] = useState(false);
     const[btnLoading,setBtnLoading] = useState(false);
+
+    async function registerUser(name:string,email:string,password:string,navigate:(path:string)=>void){
+        setBtnLoading(true);
+        try {
+            const {data} = await axios.post(`${server}/api/v1/user/register`,{
+                name,email,password
+            })
+            toast.success("Login Successful");
+            localStorage.setItem("token",data.token);
+            setUser(data.user);
+            setIsAuth(true);
+            setBtnLoading(false);
+            navigate("/");
+        } catch (error:any) {
+            toast.error(error.response?.data?.message || "Registration Failed");
+            setBtnLoading(false);
+        }
+    }
 
     async function loginUser(email:string,password:string,navigate:(path:string)=>void){
         setBtnLoading(true);
@@ -65,11 +85,21 @@ export const UserProvider: React.FC<UserProviderProps> = ({children})=>{
             setLoading(false);
         }
     }
+
+    // LogOut Functionalities
+    async function logoutUser(){
+        localStorage.clear()
+        setUser(null);
+        setIsAuth(false);
+        toast.success("User logged out successfully");
+
+    }
+
     useEffect(()=>{
         fetchUser();
     },[])
 
-    return <UserContext.Provider value={{user,isAuth,loading,btnLoading,loginUser}}>
+    return <UserContext.Provider value={{user,isAuth,loading,btnLoading,loginUser,registerUser,logoutUser}}>
     {children}
     <Toaster></Toaster>
     </UserContext.Provider> 
