@@ -1,5 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import PlayListCard from "./PlayListCard";
+import homeImage from '../assets/home.png';
+import searchImage from '../assets/search.png';
+import stackImage from '../assets/stack.png'
+import arrow from '../assets/arrow.png';
+import plusIcon from '../assets/plus.png';
 
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -10,24 +15,24 @@ const Sidebar = () => {
           className="flex items-center gap-3 pl-8 cursor-pointer"
           onClick={() => navigate("/")}
         >
-          <img src="./home.png" alt="" className="w-6" />
+          <img src={homeImage} alt="HomeImage" className="w-6" />
           <p className="font-bold">Home</p>
         </div>
 
         <div className="flex items-center gap-3 pl-8 cursor-pointer">
-          <img src="./search.png" alt="" className="w-6" />
+          <img src={searchImage} alt="SearchImage" className="w-6" />
           <p className="font-bold">Search</p>
         </div>
       </div>
       <div className="bg-[#121212] h-[85%] rounded">
         <div className="p-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <img src="./stack.png" alt="" className="w-8" />
+            <img src={stackImage} alt="stackImage" className="w-8" />
             <p className="font-semibold">Your Library</p>
           </div>
           <div className="flex items-center gap-3">
-            <img src="./arrow.png" alt="" className="w-8" />
-            <img src="./plus.png" alt="" className="w-8" />
+            <img src={arrow} alt="" className="w-8" />
+            <img src={plusIcon} alt="plusIcon" className="w-8" />
           </div>
         </div>
         <div onClick={() => navigate("/playlist")}>

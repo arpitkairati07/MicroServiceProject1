@@ -1,5 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useUserData } from "../context/UserContext";
+import leftArrow from  '../assets/left_arrow.png';
+import rightArrow from '../assets/right_arrow.png';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -13,14 +15,14 @@ const Navbar = () => {
       <div className="w=full flex justify-between items-center font-semibold">
         <div className="flex items-center gap-2">
           <img
-            src="./left_arrow.png"
+            src={leftArrow}
             alt=" Left Arrow"
             className="w-8 bg-black p-2 rounded-2xl cursor-pointer"
             onClick={() => navigate(-1)}
           />
 
           <img
-            src="./right_arrow.png"
+            src={rightArrow}
             alt=" Left Arrow"
             className="w-8 bg-black p-2 rounded-2xl cursor-pointer"
             onClick={() => navigate(+1)}
