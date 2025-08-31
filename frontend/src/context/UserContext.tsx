@@ -79,7 +79,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({children})=>{
                     token:localStorage.getItem("token")
                 }
             });
-            setUser(data.user);
+            setUser(data);
             setIsAuth(true);
             setLoading(false);
         } catch (error) {
