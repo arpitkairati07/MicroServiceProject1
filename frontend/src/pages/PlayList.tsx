@@ -81,14 +81,14 @@ const PlayList = () => {
                         </p>
                         <p className="flex justify-center items-center gap-5">
                           <button
-                            className="text-[15px] text-center"
+                            className="text-[15px] text-center cursor-pointer"
                             onClick={() => addToPlaylist(song.id)}
                           >
                             <FaBookmark />
                           </button>
 
                           <button
-                            className="text-[15px] text-center"
+                            className="text-[15px] text-center cursor-pointer"
                             onClick={() => {
                               setSelectedSong(song.id);
                               setIsPlaying(true);
