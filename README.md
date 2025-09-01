@@ -63,8 +63,8 @@ A  music streaming application built using TypeScript with a __microservices-bas
   📦 Installation & Setup
   
   1️⃣ Clone the repository
-          <pre>git clone https://github.com/your-username/Spotify_Clone.git
-          cd Spotify_Clone </pre>
+          <pre>git clone https://github.com/arpitkairati07/MicroServiceProject1.git
+                cd MicroServiceProject1 </pre>
 
   2️⃣ Install dependencies
 
