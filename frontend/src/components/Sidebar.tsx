@@ -5,9 +5,11 @@ import searchImage from '../assets/search.png';
 import stackImage from '../assets/stack.png'
 import arrow from '../assets/arrow.png';
 import plusIcon from '../assets/plus.png';
+import { useUserData } from "../context/UserContext";
 
 const Sidebar = () => {
   const navigate = useNavigate();
+  const {user} =useUserData();
   return (
     <div className="w-[25%] h-full p-2 flex-col gap-2 text-white hidden lg:flex ">
       <div className="bg-[#121212] h-[15%] rounded flex flex-col justify-around">
@@ -46,6 +48,11 @@ const Sidebar = () => {
             Browse Podcast
           </button>
         </div>
+
+         {user && user.role === "admin" && (<button className="px-4 py-1.5 bg-white text-black text-[15px] rounded-full mt-4 cursor-pointer"
+          onClick={()=>navigate("/admin/dashboard")}>
+            Admin Dashboard
+          </button> )}
       </div>
     </div>
   );

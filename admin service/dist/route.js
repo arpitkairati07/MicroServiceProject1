@@ -5,7 +5,7 @@ const router = express.Router();
 router.post("/album/new", isAuthenticated, uploadFile, addAlbum);
 router.post("/songs/new", isAuthenticated, uploadFile, addSongs);
 router.post("/songs/:id", isAuthenticated, uploadFile, addThumbnail);
-router.post("/album/:id", isAuthenticated, deleteAlbum);
+router.delete("/album/:id", isAuthenticated, deleteAlbum);
 router.delete("/song/:id", isAuthenticated, deleteSong);
 export default router;
 //# sourceMappingURL=route.js.map
